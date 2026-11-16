@@ -1,4 +1,11 @@
-import { formatDurationVietnamese, getSubjectMeta, getTextbookMeta, SubjectId, TextbookSeriesId } from '../types/exam';
+import {
+  formatDurationVietnamese,
+  getSubjectMeta,
+  getTextbookMeta,
+  getTrangNguyenHonor,
+  SubjectId,
+  TextbookSeriesId,
+} from '../types/exam';
 
 export interface CertificateDownloadPayload {
   studentName: string;
@@ -76,8 +83,7 @@ export function downloadCertificatePng(payload: CertificateDownloadPayload): boo
   const ctx = canvas.getContext('2d');
   if (!ctx) return false;
 
-  const isExcellent = payload.score >= 9;
-  const honorTitle = isExcellent ? 'HOÀN THÀNH XUẤT SẮC' : 'HOÀN THÀNH TỐT';
+  const honor = getTrangNguyenHonor(payload.score);
   const subjectMeta = getSubjectMeta(payload.subject);
   const textbookMeta = getTextbookMeta(payload.textbookSeries);
   const todayLabel = new Intl.DateTimeFormat('vi-VN', {
@@ -91,7 +97,7 @@ export function downloadCertificatePng(payload: CertificateDownloadPayload): boo
   bgGrad.addColorStop(0, '#FFFBEB');
   bgGrad.addColorStop(0.3, '#FFFDF7');
   bgGrad.addColorStop(0.7, '#FFFDF7');
-  bgGrad.addColorStop(1, '#FEF3C7');
+  bgGrad.addColorStop(1, '#ECFDF5');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, width, height);
 
@@ -135,20 +141,20 @@ export function downloadCertificatePng(payload: CertificateDownloadPayload): boo
 
   // 4. Header Typography
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#92400E';
-  ctx.font = '600 22px "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif';
-  ctx.fillText('BẢNG VÀNG LỚP 1 · KHEN TẶNG HỌC SINH CHĂM NGOAN', width / 2, 265);
+  ctx.fillStyle = '#065F46';
+  ctx.font = '700 22px "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif';
+  ctx.fillText('BẢNG VÀNG TRẠNG NGUYÊN LỚP 1 · KHEN TẶNG SĨ TỬ CHĂM NGOAN', width / 2, 265);
 
   ctx.fillStyle = '#BE123C';
-  ctx.font = '800 76px "Bricolage Grotesque", "Segoe UI", Arial, sans-serif';
-  ctx.fillText('GIẤY KHEN', width / 2, 355);
+  ctx.font = '800 68px "Bricolage Grotesque", "Segoe UI", Arial, sans-serif';
+  ctx.fillText('GIẤY KHEN TRẠNG NGUYÊN', width / 2, 355);
 
-  ctx.fillStyle = '#475569';
+  ctx.fillStyle = '#57534E';
   ctx.font = '500 28px "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif';
   ctx.fillText('Trân trọng tuyên dương em:', width / 2, 420);
 
   // 5. Student Name + Underline
-  ctx.fillStyle = '#0F172A';
+  ctx.fillStyle = '#1C1917';
   ctx.font = '700 58px "Bricolage Grotesque", "Segoe UI", Arial, sans-serif';
   ctx.fillText(payload.studentName, width / 2, 502);
 
@@ -162,9 +168,9 @@ export function downloadCertificatePng(payload: CertificateDownloadPayload): boo
   ctx.stroke();
 
   // 6. Honor Statement
-  ctx.fillStyle = '#334155';
-  ctx.font = '500 28px "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif';
-  ctx.fillText(`Đã đạt danh hiệu ${honorTitle}`, width / 2, 592);
+  ctx.fillStyle = '#BE123C';
+  ctx.font = '700 28px "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif';
+  ctx.fillText(honor.certificatePhrase, width / 2, 592);
 
   ctx.fillStyle = '#1E293B';
   ctx.font = '600 26px "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif';

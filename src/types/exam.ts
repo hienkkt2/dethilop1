@@ -229,3 +229,31 @@ export function formatDurationVietnamese(totalSeconds: number): string {
   if (secs === 0) return `${mins} phút`;
   return `${mins} phút ${secs} giây`;
 }
+
+export function getTrangNguyenHonor(score: number): {
+  rankTitle: string;
+  certificatePhrase: string;
+} {
+  if (score >= 9.5) {
+    return {
+      rankTitle: 'TRẠNG NGUYÊN NHÍ',
+      certificatePhrase: 'ĐẠT DANH HIỆU TRẠNG NGUYÊN NHÍ — XUẤT SẮC',
+    };
+  }
+  if (score >= 9) {
+    return {
+      rankTitle: 'BẢNG NHÃN',
+      certificatePhrase: 'ĐẠT DANH HIỆU BẢNG NHÃN — HOÀN THÀNH XUẤT SẮC',
+    };
+  }
+  if (score >= 8) {
+    return {
+      rankTitle: 'THÁM HOA',
+      certificatePhrase: 'ĐẠT DANH HIỆU THÁM HOA — HOÀN THÀNH TỐT',
+    };
+  }
+  return {
+    rankTitle: 'SĨ TỬ CHĂM NGOAN',
+    certificatePhrase: 'SĨ TỬ CHĂM NGOAN',
+  };
+}

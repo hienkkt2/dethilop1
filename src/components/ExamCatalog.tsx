@@ -36,21 +36,21 @@ export default function ExamCatalog({
     {
       id: 'all',
       title: 'Tất cả 2 môn (Ngẫu nhiên)',
-      subtitle: 'Chọn ngẫu nhiên từ kho 100 đề Toán Cộng Trừ & Tiếng Việt',
+      subtitle: 'Bốc ngẫu nhiên từ kho 100 đề Toán Cộng Trừ & Tiếng Việt',
       countLabel: `${totalOfficialCount} đề thi`,
       icon: Shuffle,
     },
     {
       id: 'toan',
       title: 'Toán Lớp 1 (Phép cộng & Phép trừ)',
-      subtitle: 'Cộng trừ phạm vi 10, phạm vi 20, hình ảnh & lời văn',
+      subtitle: 'Cộng trừ phạm vi 10 & 20, hình ảnh trực quan và lời văn',
       countLabel: `${mathCount} đề thi`,
       icon: Calculator,
     },
     {
       id: 'tieng-viet',
       title: 'Tiếng Việt Lớp 1',
-      subtitle: 'Âm vần, chính tả, từ chỉ màu sắc & đọc hiểu đoạn văn',
+      subtitle: 'Âm vần, chính tả, từ chỉ màu sắc và đọc hiểu đoạn văn',
       countLabel: `${vietnameseCount} đề thi`,
       icon: BookOpen,
     },
@@ -63,20 +63,23 @@ export default function ExamCatalog({
 
   return (
     <section id="exam-catalog" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-200">
+      <div className="bg-white border border-amber-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-amber-100">
           <div>
-            <h2 className="font-display text-2xl font-bold text-slate-900">
-              Chọn môn học &amp; Bắt đầu vào thi
+            <p className="text-xs font-semibold text-amber-700">
+              Vòng thi Trực tuyến · Không cần đăng nhập
+            </p>
+            <h2 className="mt-1 font-display text-2xl font-bold text-stone-900">
+              Chọn môn thi &amp; Bắt đầu làm bài
             </h2>
-            <p className="mt-1 text-sm text-slate-600">
-              Hệ thống sẵn sàng <strong className="text-slate-900">{totalOfficialCount} bộ đề thi</strong> chuẩn SGK (25 phút/đề), tự động bốc đề ngẫu nhiên mỗi lượt thi.
+            <p className="mt-1 text-sm text-stone-600">
+              Ngân hàng <strong className="text-stone-900">{totalOfficialCount} bộ đề thi</strong> chuẩn SGK (25 phút/vòng), tự động bốc đề và đảo thứ tự câu hỏi.
             </p>
           </div>
           <button
             type="button"
             onClick={onCreateExam}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors self-start sm:self-center shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors self-start sm:self-center shrink-0 cursor-pointer"
           >
             <Plus className="w-4 h-4" aria-hidden="true" />
             <span>Tự tạo đề riêng</span>
@@ -85,8 +88,8 @@ export default function ExamCatalog({
 
         {/* Step 1: Select Subject */}
         <div className="mt-6">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">
-            1. Chọn môn thi cho con
+          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3">
+            1. Chọn môn học dự thi
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4" role="radiogroup" aria-label="Chọn môn học">
             {subjectChoices.map((choice) => {
@@ -101,29 +104,29 @@ export default function ExamCatalog({
                   onClick={() => onSelectSubject(choice.id)}
                   className={`text-left p-5 rounded-xl border transition-all flex flex-col justify-between gap-4 cursor-pointer ${
                     isSelected
-                      ? 'bg-sky-50 border-sky-600 ring-1 ring-sky-600'
-                      : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/70'
+                      ? 'bg-emerald-50/70 border-emerald-700 ring-1 ring-emerald-700'
+                      : 'bg-[#FFFDF9] border-amber-200/80 hover:border-amber-300 hover:bg-amber-50/40'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div
                       className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                        isSelected ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-600'
+                        isSelected ? 'bg-emerald-700 text-white' : 'bg-amber-100 text-amber-800'
                       }`}
                     >
                       <Icon className="w-5 h-5" aria-hidden="true" />
                     </div>
                     {isSelected && (
-                      <CheckCircle2 className="w-5 h-5 text-sky-600 shrink-0" aria-hidden="true" />
+                      <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0" aria-hidden="true" />
                     )}
                   </div>
 
                   <div>
-                    <h3 className="font-display text-base font-bold text-slate-900">
+                    <h3 className="font-display text-base font-bold text-stone-900">
                       {choice.title}
                     </h3>
-                    <p className="mt-1 text-xs text-slate-600 leading-relaxed">{choice.subtitle}</p>
-                    <p className="mt-2.5 text-xs font-semibold text-sky-700 tabular-nums">
+                    <p className="mt-1 text-xs text-stone-600 leading-relaxed">{choice.subtitle}</p>
+                    <p className="mt-2.5 text-xs font-semibold text-emerald-800 tabular-nums">
                       {choice.countLabel}
                     </p>
                   </div>
@@ -134,16 +137,16 @@ export default function ExamCatalog({
         </div>
 
         {/* Step 2: Big Start Exam Action */}
-        <div className="mt-7 pt-6 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="text-sm text-slate-600">
-            Môn đã chọn: <strong className="text-slate-900">{selectedLabel}</strong> · Thời gian:{' '}
-            <strong className="text-slate-900">25 phút</strong> · Tự động trộn câu hỏi &amp; đáp án
+        <div className="mt-7 pt-6 border-t border-amber-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="text-sm text-stone-600">
+            Môn đã chọn: <strong className="text-stone-900">{selectedLabel}</strong> · Thời gian:{' '}
+            <strong className="text-stone-900">25 phút</strong> · Đạt từ 8 điểm nhận Giấy Khen Trạng Nguyên
           </div>
 
           <button
             type="button"
             onClick={() => onStartExamFromBank(selectedSubject)}
-            className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 text-base font-semibold text-white bg-sky-600 hover:bg-sky-700 rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 text-base font-semibold text-white bg-emerald-700 hover:bg-emerald-800 border-b-2 border-emerald-900 rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             <Play className="w-5 h-5" aria-hidden="true" />
             <span>Bắt đầu vào thi</span>
@@ -151,21 +154,21 @@ export default function ExamCatalog({
         </div>
       </div>
 
-      {/* Compact Custom Exams Section (only shown when parent authored custom exams) */}
+      {/* Compact Custom Exams Section */}
       {customExams.length > 0 && (
-        <div className="mt-8 bg-white border border-slate-200 rounded-2xl p-6">
-          <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-100">
+        <div className="mt-8 bg-white border border-amber-200 rounded-2xl p-6">
+          <div className="flex items-center justify-between gap-3 pb-4 border-b border-amber-100">
             <div>
-              <h3 className="font-display text-lg font-bold text-slate-900">
-                Đề thi tự tạo ({customExams.length})
+              <h3 className="font-display text-lg font-bold text-stone-900">
+                Đề thi gia đình tự tạo ({customExams.length})
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-stone-500">
                 Các đề do phụ huynh tự soạn thêm cho bé ôn luyện
               </p>
             </div>
           </div>
 
-          <div className="mt-4 divide-y divide-slate-100">
+          <div className="mt-4 divide-y divide-amber-100">
             {customExams
               .filter((e) => SUBJECTS.some((s) => s.id === e.subject))
               .map((exam) => (
@@ -174,8 +177,8 @@ export default function ExamCatalog({
                   className="py-3 flex flex-wrap items-center justify-between gap-3"
                 >
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">{exam.title}</p>
-                    <p className="text-xs text-slate-500 tabular-nums">
+                    <p className="text-sm font-semibold text-stone-900">{exam.title}</p>
+                    <p className="text-xs text-stone-500 tabular-nums">
                       {getSubjectMeta(exam.subject).shortName} · {exam.questionCount} câu · 25 phút
                     </p>
                   </div>
@@ -183,7 +186,7 @@ export default function ExamCatalog({
                     <button
                       type="button"
                       onClick={() => onStartSpecificExam(exam)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-700 rounded-lg cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-800 rounded-lg cursor-pointer"
                     >
                       <Play className="w-3.5 h-3.5" aria-hidden="true" />
                       <span>Vào thi</span>
@@ -192,7 +195,7 @@ export default function ExamCatalog({
                       type="button"
                       onClick={() => onDeleteCustomExam(exam.id)}
                       aria-label={`Xóa đề ${exam.title}`}
-                      className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 rounded-lg cursor-pointer"
+                      className="p-2 text-stone-500 hover:text-rose-600 hover:bg-rose-50 border border-stone-200 rounded-lg cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

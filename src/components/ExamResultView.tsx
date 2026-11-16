@@ -82,30 +82,37 @@ export default function ExamResultView({
   };
 
   const performanceSummary = useMemo(() => {
+    if (result.score >= 9.5) {
+      return {
+        label: 'Danh hiệu Trạng Nguyên Nhí · Xuất sắc',
+        detail: 'Thí sinh nhí trả lời tuyệt vời! Chúc mừng con nhận Giấy Khen Trạng Nguyên Nhí.',
+        colorClass: 'text-rose-800 bg-amber-50 border-amber-300',
+      };
+    }
     if (result.score >= 9) {
       return {
-        label: 'Hoàn thành xuất sắc',
-        detail: 'Con nắm rất chắc kiến thức! Chúc mừng con nhận được Giấy khen Xuất sắc.',
-        colorClass: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+        label: 'Danh hiệu Bảng Nhãn · Hoàn thành xuất sắc',
+        detail: 'Con nắm rất chắc kiến thức! Chúc mừng con nhận Giấy Khen Bảng Nhãn.',
+        colorClass: 'text-emerald-800 bg-emerald-50 border-emerald-200',
       };
     }
     if (result.score >= 8) {
       return {
-        label: 'Hoàn thành tốt · Đạt Giấy khen',
-        detail: 'Con làm bài rất giỏi! Hãy xem lại vài câu còn lại để đạt 10 điểm nhé.',
-        colorClass: 'text-sky-700 bg-sky-50 border-sky-200',
+        label: 'Danh hiệu Thám Hoa · Hoàn thành tốt',
+        detail: 'Con làm bài rất giỏi! Hãy xem lại vài câu còn lại để đạt Trạng Nguyên Nhí nhé.',
+        colorClass: 'text-emerald-800 bg-emerald-50 border-emerald-200',
       };
     }
     if (result.score >= 6) {
       return {
-        label: 'Làm bài khá · Cố gắng thêm nhé',
-        detail: 'Con đạt từ 8 điểm trở lên sẽ được vỗ tay tuyên dương và nhận Giấy khen nhé!',
-        colorClass: 'text-sky-700 bg-sky-50 border-sky-200',
+        label: 'Sĩ tử làm bài khá · Cố gắng thêm nhé',
+        detail: 'Con đạt từ 8 điểm trở lên sẽ được vỗ tay tuyên dương và nhận Giấy Khen Trạng Nguyên nhé!',
+        colorClass: 'text-amber-800 bg-amber-50 border-amber-200',
       };
     }
     return {
       label: 'Cần ôn tập thêm',
-      detail: 'Con hãy bấm loa nghe giải thích từng câu bên dưới để ghi nhớ và làm lại nhé!',
+      detail: 'Con hãy bấm loa nghe giải thích từng câu bên dưới để ghi nhớ và thi lại nhé!',
       colorClass: 'text-amber-800 bg-amber-50 border-amber-200',
     };
   }, [result.score]);
@@ -143,14 +150,14 @@ export default function ExamResultView({
       )}
 
       {/* Instant Score Card */}
-      <div className="no-print bg-white border border-slate-200 rounded-xl p-6 sm:p-8">
+      <div className="no-print bg-white border border-amber-200 rounded-2xl p-6 sm:p-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <p className="text-xs font-medium text-slate-500">
-              {subjectMeta.name} · {textbookMeta.shortName} · Con làm bài: {result.studentName}
+            <p className="text-xs font-medium text-stone-500">
+              {subjectMeta.name} · {textbookMeta.shortName} · Thí sinh: {result.studentName}
             </p>
-            <h1 className="mt-1 font-display text-2xl sm:text-3xl font-bold text-slate-900">
-              Kết quả bài thi: {result.exam.title}
+            <h1 className="mt-1 font-display text-2xl sm:text-3xl font-bold text-stone-900">
+              Kết quả vòng thi: {result.exam.title}
             </h1>
 
             <div
@@ -159,23 +166,23 @@ export default function ExamResultView({
               <Award className="w-4 h-4 shrink-0" aria-hidden="true" />
               <span>{performanceSummary.label}</span>
             </div>
-            <p className="mt-2 text-sm text-slate-600">{performanceSummary.detail}</p>
+            <p className="mt-2 text-sm text-stone-600">{performanceSummary.detail}</p>
           </div>
 
           {/* Score Numerals */}
-          <div className="bg-slate-50 border border-slate-200 rounded-xl px-6 py-5 text-center shrink-0 min-w-[190px]">
-            <p className="text-xs font-medium text-slate-500">Điểm số đạt được</p>
-            <p className="mt-1 font-mono-nums text-4xl font-bold text-sky-700">
+          <div className="bg-[#FFFDF9] border border-amber-200 rounded-xl px-6 py-5 text-center shrink-0 min-w-[190px]">
+            <p className="text-xs font-medium text-stone-500">Điểm số đạt được</p>
+            <p className="mt-1 font-mono-nums text-4xl font-bold text-emerald-800">
               {result.score.toFixed(1)}
-              <span className="text-lg font-medium text-slate-500"> / 10</span>
+              <span className="text-lg font-medium text-stone-500"> / 10</span>
             </p>
-            <div className="mt-3 pt-3 border-t border-slate-200 flex items-center justify-center gap-4 text-xs text-slate-600 tabular-nums">
+            <div className="mt-3 pt-3 border-t border-amber-100 flex items-center justify-center gap-4 text-xs text-stone-600 tabular-nums">
               <span>
-                Đúng <strong className="text-slate-900">{result.correctCount}/{total}</strong> câu
+                Đúng <strong className="text-stone-900">{result.correctCount}/{total}</strong> câu
               </span>
               <span aria-hidden="true">·</span>
               <span className="inline-flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
+                <Clock className="w-3.5 h-3.5 text-stone-400" aria-hidden="true" />
                 {formatDurationVietnamese(result.durationSecondsUsed)}
               </span>
             </div>
@@ -183,12 +190,12 @@ export default function ExamResultView({
         </div>
 
         {/* Auto-Saved Local Leaderboard Strip */}
-        <div className="mt-6 pt-5 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <p className="inline-flex items-center gap-2 text-sm text-emerald-700 font-medium">
+        <div className="mt-6 pt-5 border-t border-amber-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <p className="inline-flex items-center gap-2 text-sm text-emerald-800 font-medium">
             <CheckCircle2 className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>
               {result.leaderboardUpdated
-                ? 'Đã tự động lưu điểm và cập nhật thành tích mới lên Bảng Xếp Hạng tuần này.'
+                ? 'Đã tự động ghi danh thành tích mới lên Bảng Vàng Trạng Nguyên tuần này.'
                 : 'Đã lưu kết quả vào lịch sử ôn luyện (giữ nguyên kỷ lục cao hơn trong tuần).'}
             </span>
           </p>
@@ -201,10 +208,10 @@ export default function ExamResultView({
                 speech.stop();
                 onNewRandomExam();
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-700 rounded-lg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-800 rounded-lg transition-colors cursor-pointer"
             >
               <Shuffle className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Làm đề ngẫu nhiên khác</span>
+              <span>Thi đề ngẫu nhiên khác</span>
             </button>
             <button
               type="button"
@@ -213,10 +220,10 @@ export default function ExamResultView({
                 speech.stop();
                 onViewLeaderboard();
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors cursor-pointer"
             >
               <Trophy className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Xem Bảng Xếp Hạng</span>
+              <span>Xem Bảng Vàng</span>
             </button>
             <button
               type="button"
@@ -225,10 +232,10 @@ export default function ExamResultView({
                 speech.stop();
                 onRetake();
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Làm lại đề này</span>
+              <span>Thi lại đề này</span>
             </button>
             <button
               type="button"
@@ -237,7 +244,7 @@ export default function ExamResultView({
                 speech.stop();
                 onBackToCatalog();
               }}
-              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-stone-700 bg-white border border-amber-200 hover:bg-amber-50 rounded-lg transition-colors cursor-pointer"
             >
               Về trang chủ
             </button>

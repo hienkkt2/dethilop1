@@ -161,7 +161,7 @@ export default function App() {
   const isTakingExam = Boolean(activeExam);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex flex-col bg-[#FCF9F2] text-stone-900">
       <Navbar
         activeView={activeView}
         onNavigate={handleNavigate}
@@ -236,23 +236,23 @@ export default function App() {
         )}
       </main>
 
-      <footer className="border-t border-slate-200 bg-white mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>Bảng Vàng Lớp 1 · Kho 100 đề Toán (Cộng &amp; Trừ) &amp; Tiếng Việt GDPT 2018</p>
+      <footer className="border-t border-amber-200/80 bg-[#FFFDF8] mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+          <p>Trạng Nguyên Lớp 1 · Kho 100 đề Toán (Cộng &amp; Trừ) &amp; Tiếng Việt GDPT 2018</p>
           <div className="flex items-center gap-5">
             <button
               type="button"
               onClick={() => handleNavigate('exams')}
               disabled={isTakingExam}
-              className="hover:text-slate-800 cursor-pointer disabled:opacity-50"
+              className="hover:text-emerald-800 cursor-pointer disabled:opacity-50"
             >
-              Luyện thi
+              Vào thi
             </button>
             <button
               type="button"
               onClick={() => handleNavigate('create')}
               disabled={isTakingExam}
-              className="hover:text-slate-800 cursor-pointer disabled:opacity-50"
+              className="hover:text-emerald-800 cursor-pointer disabled:opacity-50"
             >
               Tạo đề thi
             </button>
@@ -260,9 +260,9 @@ export default function App() {
               type="button"
               onClick={() => handleNavigate('leaderboard')}
               disabled={isTakingExam}
-              className="hover:text-slate-800 cursor-pointer disabled:opacity-50"
+              className="hover:text-emerald-800 cursor-pointer disabled:opacity-50"
             >
-              Bảng xếp hạng tuần
+              Bảng Vàng
             </button>
           </div>
         </div>
