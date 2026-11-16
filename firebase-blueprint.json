@@ -1,0 +1,269 @@
+{
+  "entities": {
+    "Exam": {
+      "title": "Exam",
+      "description": "A Grade 1 primary school exam aligned with the 2018 Vietnamese textbook curriculum.",
+      "type": "object",
+      "properties": {
+        "creatorId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID of the creator who published this exam."
+        },
+        "creatorName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Display name of the exam creator."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 140,
+          "description": "Exam title."
+        },
+        "subject": {
+          "type": "string",
+          "enum": ["toan", "tieng-viet", "tnxh", "dao-duc", "tieng-anh"],
+          "description": "Grade 1 subject code."
+        },
+        "textbookSeries": {
+          "type": "string",
+          "enum": ["ket-noi-tri-thuc", "chan-troi-sang-tao", "canh-dieu", "tong-hop"],
+          "description": "Latest Grade 1 textbook series."
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Curriculum unit or topic name."
+        },
+        "durationMinutes": {
+          "type": "number",
+          "description": "Exam duration in minutes (25 minutes)."
+        },
+        "questionCount": {
+          "type": "number",
+          "description": "Total number of questions in the exam."
+        },
+        "questions": {
+          "type": "array",
+          "description": "Bounded list of multiple-choice questions (1 to 30)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when updated."
+        }
+      },
+      "required": [
+        "creatorId",
+        "creatorName",
+        "title",
+        "subject",
+        "textbookSeries",
+        "topic",
+        "durationMinutes",
+        "questionCount",
+        "questions",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ExamAttempt": {
+      "title": "ExamAttempt",
+      "description": "A student's completed 25-minute online exam attempt with score and answers.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID of the signed-in student or parent account."
+        },
+        "studentName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Student display name."
+        },
+        "examId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "ID of the exam taken."
+        },
+        "examTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140,
+          "description": "Title of the exam taken."
+        },
+        "subject": {
+          "type": "string",
+          "enum": ["toan", "tieng-viet", "tnxh", "dao-duc", "tieng-anh"],
+          "description": "Subject code."
+        },
+        "textbookSeries": {
+          "type": "string",
+          "enum": ["ket-noi-tri-thuc", "chan-troi-sang-tao", "canh-dieu", "tong-hop"],
+          "description": "Textbook series."
+        },
+        "score": {
+          "type": "number",
+          "description": "Final score on 10-point scale."
+        },
+        "correctCount": {
+          "type": "number",
+          "description": "Number of correct answers."
+        },
+        "totalQuestions": {
+          "type": "number",
+          "description": "Total questions in the exam."
+        },
+        "durationSecondsUsed": {
+          "type": "number",
+          "description": "Time spent in seconds (0 to 1500)."
+        },
+        "weekId": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 12,
+          "pattern": "^[0-9]{4}-W[0-9]{2}$",
+          "description": "ISO week identifier for weekly ranking."
+        },
+        "selectedAnswers": {
+          "type": "array",
+          "description": "Selected option index (-1 for unanswered) per question."
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of submission."
+        }
+      },
+      "required": [
+        "userId",
+        "studentName",
+        "examId",
+        "examTitle",
+        "subject",
+        "textbookSeries",
+        "score",
+        "correctCount",
+        "totalQuestions",
+        "durationSecondsUsed",
+        "weekId",
+        "selectedAnswers",
+        "submittedAt"
+      ]
+    },
+    "LeaderboardEntry": {
+      "title": "LeaderboardEntry",
+      "description": "Public weekly leaderboard record containing no PII.",
+      "type": "object",
+      "properties": {
+        "attemptId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Linked attempt document ID."
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID of the student account."
+        },
+        "studentName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Student display name shown on leaderboard."
+        },
+        "examId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Exam ID."
+        },
+        "examTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140,
+          "description": "Exam title."
+        },
+        "subject": {
+          "type": "string",
+          "enum": ["toan", "tieng-viet", "tnxh", "dao-duc", "tieng-anh"],
+          "description": "Subject code."
+        },
+        "score": {
+          "type": "number",
+          "description": "Score on 10-point scale."
+        },
+        "correctCount": {
+          "type": "number",
+          "description": "Correct answers count."
+        },
+        "totalQuestions": {
+          "type": "number",
+          "description": "Total questions."
+        },
+        "durationSecondsUsed": {
+          "type": "number",
+          "description": "Completion time in seconds."
+        },
+        "weekId": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 12,
+          "pattern": "^[0-9]{4}-W[0-9]{2}$",
+          "description": "ISO week identifier."
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp."
+        }
+      },
+      "required": [
+        "attemptId",
+        "userId",
+        "studentName",
+        "examId",
+        "examTitle",
+        "subject",
+        "score",
+        "correctCount",
+        "totalQuestions",
+        "durationSecondsUsed",
+        "weekId",
+        "submittedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/exams/{examId}": {
+      "schema": { "$ref": "#/entities/Exam" },
+      "description": "Publicly readable Grade 1 exams created by teachers and parents."
+    },
+    "/attempts/{attemptId}": {
+      "schema": { "$ref": "#/entities/ExamAttempt" },
+      "description": "Owner-private exam attempt records with submitted answers and scores."
+    },
+    "/leaderboard/{entryId}": {
+      "schema": { "$ref": "#/entities/LeaderboardEntry" },
+      "description": "Public weekly leaderboard entries without PII, linked atomically to attempts."
+    }
+  }
+}

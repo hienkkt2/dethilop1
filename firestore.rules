@@ -1,0 +1,185 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedEmail() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidSubject(subject) {
+      return subject in ['toan', 'tieng-viet', 'tnxh', 'dao-duc', 'tieng-anh'];
+    }
+
+    function isValidTextbook(series) {
+      return series in ['ket-noi-tri-thuc', 'chan-troi-sang-tao', 'canh-dieu', 'tong-hop'];
+    }
+
+    function isValidWeekId(weekId) {
+      return weekId is string && weekId.size() >= 7 && weekId.size() <= 12 && weekId.matches('^[0-9]{4}-W[0-9]{2}$');
+    }
+
+    function isValidExam(data) {
+      return data.keys().hasAll([
+        'creatorId', 'creatorName', 'title', 'subject', 'textbookSeries',
+        'topic', 'durationMinutes', 'questionCount', 'questions', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'creatorId', 'creatorName', 'title', 'subject', 'textbookSeries',
+        'topic', 'durationMinutes', 'questionCount', 'questions', 'createdAt', 'updatedAt'
+      ])
+      && data.creatorId is string && data.creatorId.size() >= 1 && data.creatorId.size() <= 128
+      && data.creatorId == request.auth.uid
+      && data.creatorName is string && data.creatorName.size() >= 1 && data.creatorName.size() <= 80
+      && data.title is string && data.title.size() >= 3 && data.title.size() <= 140
+      && isValidSubject(data.subject)
+      && isValidTextbook(data.textbookSeries)
+      && data.topic is string && data.topic.size() >= 2 && data.topic.size() <= 120
+      && data.durationMinutes is number && data.durationMinutes == 25
+      && data.questionCount is number && data.questionCount >= 1 && data.questionCount <= 30
+      && data.questions is list && data.questions.size() == data.questionCount && data.questions.size() <= 30
+      && data.questions[0] is map
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidAttempt(data) {
+      return data.keys().hasAll([
+        'userId', 'studentName', 'examId', 'examTitle', 'subject', 'textbookSeries',
+        'score', 'correctCount', 'totalQuestions', 'durationSecondsUsed', 'weekId',
+        'selectedAnswers', 'submittedAt'
+      ])
+      && data.keys().hasOnly([
+        'userId', 'studentName', 'examId', 'examTitle', 'subject', 'textbookSeries',
+        'score', 'correctCount', 'totalQuestions', 'durationSecondsUsed', 'weekId',
+        'selectedAnswers', 'submittedAt'
+      ])
+      && data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128
+      && data.userId == request.auth.uid
+      && data.studentName is string && data.studentName.size() >= 1 && data.studentName.size() <= 80
+      && isValidId(data.examId)
+      && data.examTitle is string && data.examTitle.size() >= 1 && data.examTitle.size() <= 140
+      && isValidSubject(data.subject)
+      && isValidTextbook(data.textbookSeries)
+      && data.score is number && data.score >= 0 && data.score <= 10
+      && data.totalQuestions is number && data.totalQuestions >= 1 && data.totalQuestions <= 30
+      && data.correctCount is number && data.correctCount >= 0 && data.correctCount <= data.totalQuestions
+      && data.durationSecondsUsed is number && data.durationSecondsUsed >= 0 && data.durationSecondsUsed <= 1500
+      && isValidWeekId(data.weekId)
+      && data.selectedAnswers is list && data.selectedAnswers.size() == data.totalQuestions && data.selectedAnswers.size() <= 30
+      && data.selectedAnswers[0] is number
+      && data.submittedAt is timestamp;
+    }
+
+    function isValidLeaderboardEntry(data) {
+      return data.keys().hasAll([
+        'attemptId', 'userId', 'studentName', 'examId', 'examTitle', 'subject',
+        'score', 'correctCount', 'totalQuestions', 'durationSecondsUsed', 'weekId', 'submittedAt'
+      ])
+      && data.keys().hasOnly([
+        'attemptId', 'userId', 'studentName', 'examId', 'examTitle', 'subject',
+        'score', 'correctCount', 'totalQuestions', 'durationSecondsUsed', 'weekId', 'submittedAt'
+      ])
+      && isValidId(data.attemptId)
+      && data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128
+      && data.userId == request.auth.uid
+      && data.studentName is string && data.studentName.size() >= 1 && data.studentName.size() <= 80
+      && isValidId(data.examId)
+      && data.examTitle is string && data.examTitle.size() >= 1 && data.examTitle.size() <= 140
+      && isValidSubject(data.subject)
+      && data.score is number && data.score >= 0 && data.score <= 10
+      && data.totalQuestions is number && data.totalQuestions >= 1 && data.totalQuestions <= 30
+      && data.correctCount is number && data.correctCount >= 0 && data.correctCount <= data.totalQuestions
+      && data.durationSecondsUsed is number && data.durationSecondsUsed >= 0 && data.durationSecondsUsed <= 1500
+      && isValidWeekId(data.weekId)
+      && data.submittedAt is timestamp;
+    }
+
+    function matchesLinkedAttempt(data) {
+      let linked = getAfter(/databases/$(database)/documents/attempts/$(data.attemptId)).data;
+      return linked.userId == request.auth.uid
+        && linked.examId == data.examId
+        && linked.weekId == data.weekId
+        && linked.score == data.score
+        && linked.correctCount == data.correctCount;
+    }
+
+    match /exams/{examId} {
+      allow get: if isValidId(examId);
+      allow list: if true;
+      allow create: if isVerifiedEmail()
+        && isValidId(examId)
+        && isValidExam(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isVerifiedEmail()
+        && isValidId(examId)
+        && isValidExam(incoming())
+        && existing().creatorId == request.auth.uid
+        && incoming().creatorId == existing().creatorId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'title', 'subject', 'textbookSeries', 'topic', 'questions', 'questionCount', 'updatedAt'
+        ]);
+      allow delete: if isVerifiedEmail()
+        && isValidId(examId)
+        && existing().creatorId == request.auth.uid;
+    }
+
+    match /attempts/{attemptId} {
+      allow get: if isSignedIn() && isValidId(attemptId) && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && existing().userId == request.auth.uid;
+      allow create: if isVerifiedEmail()
+        && isValidId(attemptId)
+        && isValidAttempt(incoming())
+        && incoming().submittedAt == request.time;
+      allow update: if false;
+      allow delete: if isVerifiedEmail() && isValidId(attemptId) && existing().userId == request.auth.uid;
+    }
+
+    match /leaderboard/{entryId} {
+      allow get: if isValidId(entryId);
+      allow list: if true;
+      allow create: if isVerifiedEmail()
+        && isValidId(entryId)
+        && isValidLeaderboardEntry(incoming())
+        && incoming().submittedAt == request.time
+        && existsAfter(/databases/$(database)/documents/attempts/$(incoming().attemptId))
+        && matchesLinkedAttempt(incoming());
+      allow update: if isVerifiedEmail()
+        && isValidId(entryId)
+        && isValidLeaderboardEntry(incoming())
+        && existing().userId == request.auth.uid
+        && incoming().userId == existing().userId
+        && incoming().examId == existing().examId
+        && incoming().weekId == existing().weekId
+        && incoming().submittedAt == request.time
+        && existsAfter(/databases/$(database)/documents/attempts/$(incoming().attemptId))
+        && matchesLinkedAttempt(incoming())
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'attemptId', 'studentName', 'score', 'correctCount', 'durationSecondsUsed', 'submittedAt'
+        ]);
+      allow delete: if isVerifiedEmail() && isValidId(entryId) && existing().userId == request.auth.uid;
+    }
+  }
+}
